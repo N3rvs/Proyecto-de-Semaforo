@@ -1,68 +1,58 @@
 import React, { useState } from "react";
 
-//create your first component
-const Home = () => {
-
-	const [colorRed, setSelectRed]= useState("")
-	const [colorGreen, setSelectGreen]= useState("")
-	const [colorYellow, setSelectYellow]= useState("")
-	const [colorPurple, setSelectPurple]= useState("")
-
-
-	const [newDiv, setNewDiv]= useState("")
-
-
-	const glowRender=(aux)=>{
-		if(aux == "1"){
-			setSelectRed("selected")
-			setSelectGreen("")
-			setSelectYellow("")
-			setSelectPurple("")
-		}else if (aux == "2"){
-			setSelectYellow("selected")
-			setSelectGreen("")
-			setSelectRed("")
-			setSelectPurple("")
-		}else if( aux == "3"){
-			setSelectGreen("selected")
-			setSelectYellow("")
-			setSelectRed("")
-			setSelectPurple("")
-		}else if(aux == "4"){
-			setSelectPurple("selected")
-			setSelectYellow("")
-			setSelectRed("")
-			setSelectGreen("")
+export const Home = () => {
+	
+	const [active, setActive]= useState("")
+	const handleClick = (event) => {
+		console.log(event.target.id)
+		setActive(event.target.id)
+	}
+	const [purple, setPurple] = useState(false)
+	
+	const handleNewColorButton = () => {	
+		setPurple(!purple)
+	}
+	
+	const handleButton = () => {
+		switch(active){
+			case "red":
+				setActive("green")
+			break;
+			case "green":
+				setActive("yellow")
+			break;
+			case "yellow":
+				if(purple){
+					setActive("purple")
+				} else {
+					setActive("red")
+				}
+			break;
+			case "purple":
+				setActive("red")
+			break;
+			default: setActive("green")
 		}
 	}
-	const changeColor=(ev)=>{
-		const aux = ev.target.id
-		glowRender(aux)
-	}
-	const randomColor=()=>{
-		const aux = Math.floor(Math.random()*5)
-		glowRender(aux)
-	}
-
-	const addColor=()=>{
-		setNewDiv(<div onClick={changeColor} id="4" className={`purple light ${colorPurple}`}></div>)
-	}
-
-
 	return (
-		<div className="d-flex justify-content-center flex-column">
-		<div className="trafficTop"></div>
-			<div className="container">
-				<div onClick={changeColor} id="1" className={`red light ${colorRed}`}></div>
-				<div onClick={changeColor} id="2" className={`yellow light ${colorYellow}`}></div>
-				<div onClick={changeColor} id="3" className={`green light ${colorGreen}`}></div>
-				{newDiv}
-			</div>
-			<button type="button" class="btn btn-dark w-25 m-auto mt-3" onClick={randomColor}>Change Color</button>
-			<button type="button" class="btn btn-dark w-25 m-auto mt-3" onClick={addColor}>Add Color</button>
+		<>
+		<div className="text-center traffic-top">
 		</div>
-
+			<div className="container">
+				<div className={`traffic-light red ${active === "red" ? "active" : "" }`} id="red" onClick={handleClick}></div>
+				<div className={`traffic-light yellow ${active === "yellow" ? "active" : "" }`} id="yellow" onClick={handleClick}></div>
+				<div className={`traffic-light green ${active === "green" ? "active" : "" }`} id="green" onClick={handleClick}></div>
+				{ purple && <div className={`traffic-light purple ${active === "purple" ? "active" : "" }`} id="p" onClick={handleClick}></div>}
+			</div>
+			<div className='row d-flex justify-content-end'>
+				<div className="col-8 ">
+				<button type="button" class="btn btn-dark w-25 m-auto mt-3 sm-w-100" onClick={handleButton}>Change Color</button>
+				<button type="button" class="btn btn-dark w-25 m-auto mt-3 sm-w-100" onClick={handleNewColorButton}>Add Color</button>
+				</div>
+				<h3 className="col-7 text-warning my-5"> by Guillermo Longueira 🖥️</h3>
+			</div>
+		
+		</>
 	);
 };
 
-export default Home;
